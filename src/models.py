@@ -1,11 +1,17 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import create_engine
 from eralchemy2 import render_er
+import enum
 
 Base = declarative_base()
+
+class MediaType(enum.Enum):
+    IMAGE = 1
+    VIDEO = 2
+
 
 class User(Base):
     __tablename__ = 'user'  
@@ -31,8 +37,8 @@ class Media(Base):
     __tablename__ = 'media'
 
     id = Column(Integer, primary_key=True)
-    type = Column(String(20), nullable=False)
-    url = Column(String(50), nullable=False)
+    type = Column(Enum(MediaType), nullable=False)
+    url = Column(String(100), nullable=False)
 
     post_id = Column(Integer, ForeignKey('post.id'))
     post = relationship(Post)
